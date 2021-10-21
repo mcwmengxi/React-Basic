@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+    <style>
+        .numberitem{
+            width: 100px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const numbers=Array(5).fill(0).map((value,index) =>index+1)
+        // console.log(numbers);
+        // 提取变量
+        function ListItem(props){
+            return (
+                <li >{props.value}</li>
+            )
+        }
+        class NumberItem extends React.Component{
+            constructor(props) {
+                super(props);
+            }
+            render(){
+                const numbers = this.props.numbers
+                const listItem = numbers.map((item) =>{
+                    return <ListItem key={item.toString()} value={item} />
+                })
+                return (
+                    <div className="numberitem">                      
+                        <ul>{listItem}</ul>
+                    </div>
+                )
+            }        
+        }
+
+        // class NumberItem extends React.Component{
+        //     constructor(props) {
+        //         super(props);
+        //     }
+        //     render(){
+        //         const numbers = this.props.numbers
+          
+        //         return (
+        //             <div>
+        //                 <ul>
+        //                     {
+        //                     numbers.map((item) =>{
+        //                         return <li key={item.toString()}>{item}</li>
+        //                     })
+        //                     }
+        //                 </ul>
+                        
+        //             </div>
+        //         )
+        //     }
+            
+        // }
+        const posts = [
+        {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+        {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+        ];
+        function Blog(props){
+            const title = (
+                <ul>
+                    {
+                        props.posts.map(post => <li key={post.id}>{post.title}</li>)
+                    }
+                </ul>
+            )
+            const all = (
+                props.posts.map(post => <div key={post.id}>
+                    <h3 >{post.title}</h3>
+                    <p  >{post.content}</p>
+                </div>)
+            )
+            return (
+                <div className="blog">
+                    <div>
+                        {title}
+                    </div>
+                    <div>
+                        {all}
+                    </div>
+                </div>
+            )
+        }
+        class  App extends React.Component{
+            render(){
+
+                return (                  
+                    <div>
+                        <Blog posts={posts}/>,
+                        <NumberItem numbers={numbers} />
+                        
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>

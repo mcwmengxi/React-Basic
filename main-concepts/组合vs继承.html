@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+    <style>
+        .FancyBoader-blue{
+            border: 10px solid blue;
+            padding: 10px 10px;
+        }
+
+
+        .Dialog-title {
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        .Dialog-message {
+            font-size: larger;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        function WelcomeDialog(props){
+            return (
+                <Dialog title="Welcome" message="Thank you for visiting our spacecraft!" />
+            )
+        }
+        function Dialog(props){
+            return (
+                <BlueBorder color="blue">
+                    <h1 className="Dialog-title">{props.title}</h1>
+                    <p className="Dialog-message">{props.message}</p>
+                    {props.children}
+                </BlueBorder>
+            )
+        }
+        function BlueBorder(props){
+            return (
+                <div className={"FancyBoader FancyBoader-"+ props.color} >
+                    {props.children}    
+                </div>
+            )
+        }
+        class SignUpDialog extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state={
+                    value:""
+                }
+                this.handleChange= this.handleChange.bind(this)
+                this.handleBtn = this.handleBtn.bind(this)
+            }
+            handleChange(e){
+                this.setState({
+                    value:e.target.value
+                })
+            }
+            handleBtn(){
+                console.log(this.state.value);
+            }
+            render(){
+                return (
+                <Dialog title="Mars Exploration Program"
+              message="How should we refer to you?">
+                    <input type="text" value={this.state.value} onChange={this.handleChange} />
+                    <button onClick={this.handleBtn}>提交</button>
+                </Dialog>
+                )
+            }
+            
+        }
+
+        ReactDOM.render(
+            <div>
+                <WelcomeDialog />
+                <SignUpDialog />
+            </div>,           
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <!-- 函数组件与class组件 -->
+    <!-- <script type="text/babel">
+        function Welcome(props){
+            return <h1>hello,函数组件,{props.name}</h1>
+        }
+        // class Welcome extends React.Component{
+        //     render(){
+        //         return<h1>hello,class组件,{this.props.name}</h1>
+        //     }
+        // }
+        const element = <Welcome name="nangong"/>
+        ReactDOM.render(
+            element,
+            document.getElementById('root')
+        )
+    </script> -->
+
+    <!-- 组合组件 -->
+    <!-- <script type="text/babel">
+        function Welcome(props){
+            return <h1>hello,函数组件,{props.name}</h1>
+        }
+        function App(props){
+            return (
+                <div>                
+                    <Welcome name="1" />
+                    <Welcome name="2" />
+                    <Welcome name="3" />
+                </div>
+            )
+        }
+        const element = <App />
+        ReactDOM.render(
+            element,
+            document.getElementById('root')
+        )
+    </script> -->
+    <!-- Props -->
+    <script type="text/babel">
+        const comment = {
+            date: new Date(),
+            text: 'I hope you enjoy learning React!',
+            author: {
+                name: 'Hello Kitty',
+                avatarUrl: 'https://placekitten.com/g/64/64',
+            },
+        };
+        function Avatar(props){
+            return (
+                <img class="user-img" src={props.avatarUrl} >
+                      
+                </img>
+            )
+        }
+        function Userinfo(props){
+            return (
+                <div class="userinfo">
+                    <Avatar avatarUrl={props.user.avatarUrl} />
+                    <div class="user-name">
+                        {props.user.name}
+                    </div>
+                </div>
+            )
+        }
+        function Comment(props){
+            return (
+                <div class="comment">
+                    <Userinfo user={props.comment.author} />
+                    <div class="comment-text">
+                        {props.comment.text}
+                    </div>
+                    <div class="comment-date">
+                    
+                        {props.comment.date.toLocaleDateString()}
+                    </div>    
+                </div>
+            )
+        }
+        ReactDOM.render(
+            <Comment comment={comment} />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Form extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state={
+                    value:''
+                }
+                this.handleChange = this.handleChange.bind(this)
+                this.handleSubmit = this.handleSubmit.bind(this)
+            }
+            handleChange(e){
+                this.setState({
+                    value:e.target.value
+                })
+             
+            }
+            handleSubmit(e){
+                console.log(this.state.value);
+                e.preventDefault()  
+            }
+            render(){
+                return (
+                    <div>                      
+                        <form onSubmit={this.handleSubmit}>
+                            <label>
+                                姓名：
+                                <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                            </label>
+                            <input type="submit" value="提交" />    
+                        </form>
+                        <div>{this.state.value}</div>               
+                    </div>
+                )
+            }
+            
+        }
+        class Textarea extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state={
+                    value: '请撰写一篇关于你喜欢的 DOM 元素的文章.'
+                }
+                this.handleChange = this.handleChange.bind(this)
+                this.handleSubmit = this.handleSubmit.bind(this)
+            }
+            handleChange(e){
+                this.setState({
+                    value:e.target.value
+                })
+             
+            }
+            handleSubmit(e){
+                console.log(this.state.value);
+                e.preventDefault()  
+            }
+            render(){
+                return (
+                    <div>
+                        
+                        <form onSubmit={this.handleSubmit}>
+                            <label>
+                                文章：
+                                <textarea type="text" value={this.state.value} onChange={this.handleChange}> </textarea>
+                            </label>
+                            <input type="submit" value="提交" />    
+                        </form>
+                        <div>{this.state.value}</div>  
+                    </div>
+                )
+            }
+            
+        }
+        class Select extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state={
+                    value: ''
+                }
+                this.handleChange = this.handleChange.bind(this)
+                this.handleSubmit = this.handleSubmit.bind(this)
+            }
+            handleChange(e){
+                this.setState({
+                    value:e.target.value
+                })
+             
+            }
+            handleSubmit(e){
+                console.log(this.state.value);
+                e.preventDefault()  
+            }
+            render(){
+                return (
+                    <div>
+                        
+                        <form onSubmit={this.handleSubmit}>
+                            <label>
+                                Pick your favorite flavor：
+                                <select value={this.state.value} onChange={this.handleChange} name="" id="">
+                                    <option value="grapefruit">葡萄柚</option>
+                                    <option value="lime">酸橙</option>
+                                    <option value="coconut">椰子</option>
+                                    <option value="mango">芒果</option>
+                                </select>
+                            </label>
+                            <input type="submit" value="提交" />    
+                        </form>
+                        <div>{this.state.value}</div>  
+                    </div>
+                )
+            }
+            
+        }
+        class MoreInput extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state={
+                    isChecked:true,
+                    value: 1
+                }
+                this.handleChange = this.handleChange.bind(this)
+            }
+            handleChange(e){
+                const name = e.target.name
+                const value = e.target.name==="isChecked"?e.target.checked:e.target.value
+                this.setState({
+                    [name]:value
+                })
+             
+            }
+            handleSubmit(e){
+                console.log(this.state.value);
+                e.preventDefault()  
+            }
+            render(){
+                const show = (       
+                        this.state.isChecked==true && <div>参加人数：{this.state.value}</div>                                  
+                )
+                return (
+                    <div>
+                        
+                        <form>
+                            <label>
+                                是否参加：
+                                <input type="checkbox" name="isChecked" checked={this.state.isChecked}  onChange={this.handleChange} />
+                            </label>
+                            <label>
+                                人数：
+                                <input type="number" name="value" value={this.state.value} onChange={this.handleChange} />
+                            </label>
+             
+                        </form>
+                        <div>
+                            {show}
+                        </div>
+                            
+                        
+                        
+                    </div>
+                )
+            }
+            
+        }
+        function App(props){
+            return (
+                <div>
+                    <Form />
+                    <Textarea />
+                    <Select />
+                    <MoreInput />
+                    
+                </div>
+            )
+        }
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>
