@@ -1,6 +1,10 @@
 # demo井字棋
 
-第一次提交。
+first commit
+
+# learn main-concepts
+
+second commit
 
 # Getting Started with Create React App
 

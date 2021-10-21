@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+        font-family: sans-serif;
+        margin: 0;
+        }
+        button {
+        height: 40px;
+        width: 200px;
+        }
+        .warning {
+        line-height: 40px;
+        background-color: red;
+        text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+    <script type="text/babel">
+        class LoginControl extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state={
+                    loginStatus:true
+                }
+                this.handleclick= this.handleclick.bind(this)
+            }
+            handleclick(){
+               this.setState(state =>({
+                   loginStatus:!state.loginStatus
+               }))
+            //    console.log(this.state.loginStatus);
+            }
+            render(){
+                return(
+                    <div className="login-control">
+                        <div className="text">
+                            {this.state.loginStatus?"Please sign up.":"Welcome back!"}
+                        </div>
+                        <button className="btn" onClick={this.handleclick}>
+                            {this.state.loginStatus?'login':"logout"}
+                        </button>
+                    </div>
+                )
+            }
+        }
+        const messages = ['React', 'Re: React', 'Re:Re: React'];
+        class MailBox extends React.Component{
+            constructor(props) {
+                super(props);
+                
+            }
+            render(){
+                return (
+                    <div>                      
+                        <h1>hello</h1>
+                        {
+                            this.props.unreadMessage.length>0 &&
+                            <p>You have {this.props.unreadMessage.length} unread messages.</p>
+                        }          
+                    </div>                 
+                )
+            }
+            
+        }
+        function Warning(props){
+            if(!props.showWarning){
+                return null
+            }
+            return (
+               <div className="warning">
+                Warning!
+                </div>
+            )
+        }
+        class Page extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state={
+                    showWarning:true
+                }
+            }
+            handleclick(){
+                this.setState(state => ({
+                    showWarning: !state.showWarning
+                }))
+            }
+            render(){
+                return (
+                    <div>
+                        <Warning showWarning={this.state.showWarning} />
+                        <button onClick={()=>this.handleclick()}>{this.state.showWarning?"Hide":"Show"}</button>
+                    </div>
+                )
+            }
+            
+        }
+        function App(props){
+            return (
+                <div>
+                    <LoginControl />
+                    <MailBox unreadMessage={messages}/>  
+                    <Page />  
+                </div>
+            )
+        }
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>

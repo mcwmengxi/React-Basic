@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自上而下或者自下而上构建应用</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const jsonData=[
+        {category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football"},
+        {category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball"},
+        {category: "Sporting Goods", price: "$29.99", stocked: false, name: "Basketball"},
+        {category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch"},
+        {category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5"},
+        {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
+        ];
+        class ProductRow extends React.Component{
+            constructor(props) {
+                super(props);              
+            }
+            render(){
+                return(
+                    <tr>
+                        <td>{this.props.name}</td><td>{this.props.price}</td>
+                    </tr>
+                )
+            }
+            
+        }
+        function ProductCategoryRow(props){
+            return(
+                <tr>
+                    <td >
+                        {props.category}
+                    </td>    
+                </tr>              
+            )
+        }
+        function ProductTable(props){
+            const jsonData=props.jsonData
+            const category = jsonData.map((item,index) =>{
+                return item.category
+            })
+            const newcategory = [...new Set(category)]
+            const productGroup = (
+                newcategory.map((item,index)=>{
+                    let jsonDataCategory
+                    
+                    // stock是否选中
+                    if(props.isStockOnly){
+                        jsonDataCategory = jsonData.filter(product =>{
+                            return product.category === item&&product.stocked===true
+                        })
+                    }else{
+                        jsonDataCategory = jsonData.filter(product =>{
+                            return product.category === item
+                        })
+                    }
+                    // 搜索框搜索
+                    let filterjsonDataCategory = jsonDataCategory
+                    if(props.filterText!==''){
+                        filterjsonDataCategory =  jsonDataCategory.filter((item)=>{
+                            // javascript中String对象的search方法，同时也可以使用正则表达式来进行匹配过滤
+                            return -1 !== item.name.search(props.filterText)
+                        })
+                    }
+                    return (
+                        <React.Fragment key={index}>
+                            <ProductCategoryRow key={index} category={item}/>
+                            {
+                                filterjsonDataCategory.map((product,i) => {
+                                    return <ProductRow key={i} name={product.name} price={product.price}/>
+                                })
+                            }
+                        </React.Fragment>
+                    )
+                })
+            )
+            return (
+                <table>                  
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       {productGroup} 
+                    </tbody>                 
+                </table>
+            )
+        }
+        class SearchBar extends React.Component{
+            constructor(props) {
+                super(props);
+                
+            }
+            handleFillterChange = (e)=>{
+                
+                this.props.onFilterChange(e.target.value)
+            }
+            handleStockChange =(e)=>{
+                const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+                this.props.onCheckboxChange(value)
+            }
+            render(){
+                return (
+                    <div className="serach">
+                        <input type="text" value={this.props.filterText} onChange={this.handleFillterChange} />
+                        <br /> 
+                        <input type="checkbox" checked={this.props.isStockOnly}  onChange={this.handleStockChange}/>
+                        <span> Only show products in stock</span >
+                    </div>
+                )
+            }
+            
+        }
+        class FilterableProductTable extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state = {filterText: '', isStockOnly: false}
+            }
+            handleFilter = (value)=>{
+                this.setState({
+                    filterText:value
+                })
+            }
+            handleStock = (checked)=>{
+                this.setState({
+                    isStockOnly:checked
+                })
+            }
+            render(){
+
+                // console.log("filterText updated: " + this.state.filterText);
+                // console.log("checked updated: " + this.state.isStockOnly);
+                return (
+                    <div>                
+                        <SearchBar 
+                        filterText={this.state.filterText} 
+                        onCheckboxChange={this.handleStock} 
+                        onFilterChange={this.handleFilter} 
+                        isStockOnly={this.state.isStockOnly} />
+                        <ProductTable 
+                        filterText={this.state.filterText}
+                        isStockOnly={this.state.isStockOnly}
+                        jsonData={jsonData}/>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(
+            <FilterableProductTable />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Timer extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={
+                    time:new Date().toLocaleTimeString()
+                }
+            }
+            componentDidMount(){
+                this.timer = setInterval(() => {
+                    this.setState({
+                        time:new Date().toLocaleTimeString()
+                    })
+                },1000)
+            }
+            componentWillUnMount(){
+                clearInterval(this.timer)
+            }
+            
+            render (){
+                
+                return (
+                    <div className="time">
+                        {this.state.time}    
+                    </div>
+                )
+            }
+        }
+        function App(props){
+            return (
+                <div>
+                    <Timer />
+                    <Timer />
+                    <Timer />
+                </div>
+            )
+        }
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>

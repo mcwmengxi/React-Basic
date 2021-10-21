@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const typeNames = {
+            c: 'Celsius',
+            f: 'Fahrenheit'
+        };
+
+        function toCelsius(fahrenheit) {
+            return (fahrenheit - 32) * 5 / 9;
+        }
+
+        function toFahrenheit(celsius) {
+            return (celsius * 9 / 5) + 32;
+        }
+        function BoilingVerdict(props){
+            if(props.celsius>=100){
+                return <p>The water would boil.</p>;
+            }
+            return <p>The water would not boil.</p>;
+        }
+        class Temperature extends React.Component{
+            constructor(props) {
+                super(props);
+                this.handleChange=this.handleChange.bind(this)
+            }
+            handleChange(e){
+                this.props.onTemperatureChange(e.target.value) 
+            }
+            render(){
+                const temperature = this.props.temperature;
+                const type = this.props.type;
+                return(
+                        <fieldset>
+                            <legend>input the temperature in {typeNames[type]}:</legend>
+                            <input  value={temperature} onChange={this.handleChange} />  
+                        </fieldset>         
+                )
+            }
+            
+        }
+        
+        function tryConvert(temperature,convert){
+            const input = parseFloat(temperature)
+            if(Number.isNaN(input)){
+                return '';
+            }else{
+                const output = convert(temperature)
+                const rounded = Math.round(output*1000)/1000
+                return rounded.toString()
+            }
+        }
+        class Calculator extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state={
+                    temperature:'',
+                    type:'c'
+                }
+                this.handleCelsiusChange=this.handleCelsiusChange.bind(this)
+                this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this)
+            }
+            handleCelsiusChange(temperature){
+                this.setState({
+                    temperature:temperature,
+                    type:'c'
+                })
+            }
+            handleFahrenheitChange(temperature){
+                this.setState({
+                    temperature:temperature,
+                    type:'f'
+                })
+            }
+            render(){
+                const temperature = this.state.temperature
+                const type = this.state.type
+                const celsius = type==='f' ? tryConvert(temperature,toCelsius):temperature
+                const fahrenheit = type==='c' ? tryConvert(temperature,toFahrenheit):temperature
+                return (
+                    <div>
+                        <Temperature type='c' temperature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
+                        <Temperature type='f' temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />
+                        <BoilingVerdict celsius={parseFloat(celsius)} />
+                    </div>
+                )
+            }
+            
+        }
+        
+        ReactDOM.render(
+            <Calculator />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>
