@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Controlled Components
+        class NameFormControl extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state={
+                    value:''
+                }
+            }
+            componentDidUpdate(){
+                console.log(this.state.value);
+            }
+            handleChange =(e)=>{
+                // this.setState({
+                //     value:e.target.value
+                // })
+                this.setState(()=>({
+                    value:e.target.value
+                }),()=>{
+                    console.log(this.state.value);
+                })
+                console.log(this.state.value);
+            }
+            handleSubmit = (e)=>{
+                console.log(this.state.value);
+                e.preventDefault()
+            }
+            render(){
+                return(
+                    <form onSubmit={this.handleSubmit}>
+                        <label htmlFor="">name:
+                            <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                        </label>
+                        <input type="submit" value="提交" />
+                    </form>
+                )
+            }
+        }
+        // Uncontrolled Components
+        class NameForm extends React.Component{
+            constructor(props) {
+                super(props);
+                this.input = React.createRef()
+            }
+            handleSubmit = (e)=>{
+                console.log(this.input);
+                console.log(this.input.current.value);
+                e.preventDefault()
+            }
+            render(){
+                return(
+                    <form onSubmit={this.handleSubmit}>
+                        <label htmlFor="">name:
+                            <input type="text" defaultValue="NanGong" ref={this.input} />
+                        </label>
+                        <input type="submit" value="提交" />
+                    </form>
+                )
+            }
+        }
+        class FileInput extends React.Component{
+            constructor(props) {
+                super(props);
+                this.fileInput = React.createRef()
+            }
+            handleSubmit = (e)=>{
+                e.preventDefault()
+                console.log(this.fileInput.current);
+                console.log(this.fileInput.current.files[0].name ? this.fileInput.current.files[0].name : null);
+            }
+            render(){
+                return(
+                    <form onSubmit={this.handleSubmit}>
+                        <label htmlFor="">name:
+                            <input type="file" ref={this.fileInput} />
+                        </label>
+                        <button type="submit" >提交</button>
+                    </form>
+                )
+            }
+        }
+        
+        ReactDOM.render(
+            <React.Fragment >
+                <NameForm />
+                <NameFormControl />
+                <FileInput />
+            </React.Fragment>,
+            
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>
