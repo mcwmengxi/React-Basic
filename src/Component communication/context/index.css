@@ -1,0 +1,15 @@
+.component-a{
+    width: 500px;
+    background-color: aqua;
+    margin: 8px;
+}
+.component-b{
+    width: 100%;
+    background-color: grey;
+    margin: 8px;
+}
+.component-c{
+    width: 100%;
+    background-color: skyblue;
+    margin: 8px;
+}
