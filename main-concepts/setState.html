@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="./js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="./js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+    // (1). setState(stateChange, [callback])------对象式的setState
+    //     1.stateChange为状态改变对象(该对象可以体现出状态的更改)
+    //     2.callback是可选的回调函数, 它在状态更新完毕、界面也更新后(render调用后)才被调用
+                        
+    // 	(2). setState(updater, [callback])------函数式的setState
+    //             1.updater为返回stateChange对象的函数。
+    //             2.updater可以接收到state和props。
+    //             4.callback是可选的回调函数, 它在状态更新、界面也更新后(render调用后)才被调用。
+    // 总结:
+    // 		1.对象式的setState是函数式的setState的简写方式(语法糖)
+    // 		2.使用原则：
+    // 				(1).如果新状态不依赖于原状态 ===> 使用对象方式
+    // 				(2).如果新状态依赖于原状态 ===> 使用函数方式
+    // 				(3).如果需要在setState()执行后获取最新的状态数据, 
+    // 					要在第二个callback函数中读取
+        class Parent extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={
+                    count:0
+                }
+            }    
+            handleClick=()=>{
+                //对象式 setState
+                // this.setState({
+                //     count:99
+                // },()=>{
+                //     console.log(this.state.count);
+                // })
+                // console.log("this.setState()执行后调用:",this.state.count);
+
+                //函数式 setState
+                  this.setState(state => ({count:state.count+1}),()=>{
+                    console.log(this.state.count);
+                })
+                console.log("this.setState()执行后调用:",this.state.count);
+            }     
+            render (){                
+                return (
+                    <React.Fragment>
+                        <span>{this.state.count}</span>
+                        <button onClick={this.handleClick}>+</button>
+                    </React.Fragment>
+                )
+            }
+        }
+        function App(props){
+            return (
+                <React.Fragment>
+                    <Parent />         
+                </React.Fragment>
+            )
+        }
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>
